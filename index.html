@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="description" content="Enhance Quality Pro - Professional image quality enhancer. Transform your photos to 4K High Quality with advanced enhancement technology.">
+  <meta name="keywords" content="image upscaler, enhance image quality, 4K photo enhancer, HD quality, professional image enhancer, free tool">
+  <meta name="author" content="Enhance Quality Pro">
+  <meta name="robots" content="index, follow">
+  <title>Enhance Quality Pro | 4K High Quality Image Enhancer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 10% 20%, #0a0f1e, #020408);
+      color: #f0f0f0;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+      min-height: 100vh;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #FF3B6F, #9B4DFF, #00C2FF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.2rem 1.8rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 1rem;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #FF3B6F, #9B4DFF, #00C2FF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      background: rgba(155,77,255,0.2);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      border: 1px solid rgba(155,77,255,0.4);
+    }
+
+    .card {
+      background: rgba(12, 18, 30, 0.75);
+      backdrop-filter: blur(16px);
+      border-radius: 2rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 25px 45px rgba(0,0,0,0.5);
+      padding: 2rem;
+    }
+
+    .upload-area {
+      border: 2px dashed rgba(255,255,255,0.35);
+      border-radius: 1.5rem;
+      background: rgba(0,0,0,0.3);
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .upload-area:hover {
+      border-color: #FF3B6F;
+      background: linear-gradient(135deg, rgba(255,59,111,0.08), rgba(155,77,255,0.08));
+    }
+
+    .upload-area.has-image {
+      padding: 1rem;
+      border-style: solid;
+      border-color: #9B4DFF;
+    }
+
+    .upload-icon {
+      font-size: 3.5rem;
+      background: linear-gradient(145deg, #FF6A88, #A45EFF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .preview-in-upload {
+      max-width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .quality-indicator {
+      background: linear-gradient(95deg, #FF3B6F, #9B4DFF);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+
+    .enhance-btn {
+      background: linear-gradient(95deg, #FF3B6F, #9B4DFF);
+      width: 100%;
+      border: none;
+      padding: 1rem 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 3rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 20px rgba(155,77,255,0.3);
+      margin: 1.5rem 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .enhance-btn:active {
+      transform: scale(0.98);
+    }
+
+    .enhance-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .info-message {
+      background: rgba(0,0,0,0.4);
+      border-radius: 2rem;
+      padding: 0.6rem 1rem;
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .comparison-section {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .comparison-card {
+      background: rgba(0,0,0,0.4);
+      border-radius: 1.2rem;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .comparison-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .comparison-img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      border-radius: 0.8rem;
+      background: #0a0e1a;
+      margin-bottom: 0.8rem;
+    }
+
+    .download-btn {
+      background: linear-gradient(95deg, #00C2FF, #9B4DFF);
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 3rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 0.5rem;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,194,255,0.3);
+    }
+
+    .loader {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .ad-container {
+      margin: 2rem 0 1rem;
+      background: rgba(0,0,0,0.2);
+      border-radius: 1.2rem;
+      padding: 0.8rem;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .ad-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .native-banner {
+      min-height: 90px;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .social-bar-container {
+      min-height: 60px;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0 1rem;
+      font-size: 0.8rem;
+      color: #888;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 680px) {
+      .container { padding: 1rem; }
+      .card { padding: 1.2rem; }
+      .comparison-section { grid-template-columns: 1fr; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <nav>
+    <div class="logo">
+      <i class="fas fa-magic"></i> 
+      <span>Enhance Quality Pro</span>
+    </div>
+    <div class="badge">
+      <i class="fas fa-4k"></i> 4K Ultra HD
+    </div>
+  </nav>
+
+  <div class="card">
+    <div style="text-align: center; margin-bottom: 1.2rem;">
+      <h1 style="font-size: 1.8rem; font-weight: 800;">✨ Enhance Quality</h1>
+      <p style="opacity: 0.85; margin-top: 0.5rem;">Transform your photos to <strong class="gradient-text">4K High Quality</strong> with advanced enhancement technology</p>
+    </div>
+
+    <!-- Upload Area -->
+    <div id="uploadArea" class="upload-area">
+      <div id="uploadContent">
+        <div class="upload-icon"><i class="fas fa-cloud-upload-alt fa-3x"></i></div>
+        <p style="font-weight: 600; font-size: 1.1rem;">Click or drag & drop image</p>
+        <p style="font-size: 0.75rem; opacity: 0.7;">JPG, PNG, WebP | Max 10MB</p>
+      </div>
+      <input type="file" id="fileInput" accept="image/jpeg, image/png, image/webp" style="display: none;">
+    </div>
+
+    <button id="enhanceBtn" class="enhance-btn" disabled>
+      <i class="fas fa-wand-magic"></i> Enhance Quality
+    </button>
+    
+    <div class="info-message">
+      <i class="fas fa-chart-line"></i> <strong>4K High Quality Upgrade:</strong> Sharpness +50% | Optimized Contrast | Noise Reduction | Enhanced Color Vibrancy
+    </div>
+
+    <!-- Comparison Section - Original vs Enhanced -->
+    <div id="comparisonSection" class="comparison-section" style="display: none;">
+      <div class="comparison-card">
+        <h3><i class="fas fa-image"></i> Original Image</h3>
+        <img id="originalCompareImg" class="comparison-img" alt="Original">
+        <span class="quality-indicator" style="background: rgba(255,255,255,0.2);">Standard Quality</span>
+      </div>
+      <div class="comparison-card">
+        <h3><i class="fas fa-star"></i> 4K High Quality</h3>
+        <img id="enhancedCompareImg" class="comparison-img" alt="Enhanced 4K">
+        <button id="downloadEnhancedBtn" class="download-btn">
+          <i class="fas fa-download"></i> Download 4K Quality
+        </button>
+        <span class="quality-indicator">✨ 4K Ultra HD</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Adsterra Native Banner - New Code -->
+  <div class="ad-container">
+    <div class="ad-label"><i class="fas fa-ad"></i> Sponsored Advertisement</div>
+    <div class="native-banner">
+      <script async="async" data-cfasync="false" src="https://bredsoy.com/33ae615d3c68794f83870c75964b3ead/invoke.js"></script>
+      <div id="container-33ae615d3c68794f83870c75964b3ead"></div>
+    </div>
+  </div>
+
+  <!-- Adsterra Social Bar - New Code -->
+  <div class="ad-container">
+    <div class="ad-label"><i class="fas fa-share-alt"></i> Social Bar Ads</div>
+    <div class="social-bar-container">
+      <script src="https://bredsoy.com/e1/a7/75/e1a775edef24917816db0b66ab24e4a3.js"></script>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Enhance Quality Pro — 4K High Quality Image Enhancer | 100% Free, Professional Results</p>
+    <p>⚡ Sharpness ↑ | Contrast ↑ | Detail ↑ | Color Vibrancy ↑ | 4K Ultra HD Output</p>
+  </footer>
+</div>
+
+<script>
+  // DOM Elements
+  const uploadArea = document.getElementById('uploadArea');
+  const fileInput = document.getElementById('fileInput');
+  const enhanceBtn = document.getElementById('enhanceBtn');
+  const comparisonSection = document.getElementById('comparisonSection');
+  const originalCompareImg = document.getElementById('originalCompareImg');
+  const enhancedCompareImg = document.getElementById('enhancedCompareImg');
+  const downloadBtn = document.getElementById('downloadEnhancedBtn');
+
+  // State
+  let uploadedFile = null;
+  let originalImageUrl = null;
+  let originalImageElement = null;
+  let enhancedBlob = null;
+  let enhancedImageUrl = null;
+  let isEnhancing = false;
+
+  // Show image in upload area
+  function showImageInUploadArea(file, imageUrl) {
+    uploadArea.innerHTML = `
+      <img src="${imageUrl}" class="preview-in-upload" alt="Preview">
+      <div style="font-size: 0.75rem; color: #aaa; margin-top: 0.5rem;">
+        <i class="fas fa-image"></i> ${file.name.substring(0, 35)} | ${(file.size / 1024).toFixed(1)} KB
+      </div>
+      <button class="change-image-btn" id="changeImageBtn" style="background: rgba(255,255,255,0.15); border: none; padding: 0.4rem 1rem; border-radius: 2rem; font-size: 0.75rem; color: white; cursor: pointer; margin-top: 0.8rem;">
+        <i class="fas fa-exchange-alt"></i> Change Image
+      </button>
+    `;
+    uploadArea.classList.add('has-image');
+    
+    const changeBtn = document.getElementById('changeImageBtn');
+    if (changeBtn) {
+      changeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        resetUploadArea();
+        fileInput.click();
+      });
+    }
+  }
+
+  function resetUploadArea() {
+    uploadArea.innerHTML = `
+      <div id="uploadContent">
+        <div class="upload-icon"><i class="fas fa-cloud-upload-alt fa-3x"></i></div>
+        <p style="font-weight: 600; font-size: 1.1rem;">Click or drag & drop image</p>
+        <p style="font-size: 0.75rem; opacity: 0.7;">JPG, PNG, WebP | Max 10MB</p>
+      </div>
+      <input type="file" id="fileInput" accept="image/jpeg, image/png, image/webp" style="display: none;">
+    `;
+    uploadArea.classList.remove('has-image');
+    
+    const newFileInput = document.getElementById('fileInput');
+    if (newFileInput) {
+      newFileInput.addEventListener('change', handleFileSelect);
+    }
+    
+    comparisonSection.style.display = 'none';
+    
+    if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
+    if (enhancedImageUrl) URL.revokeObjectURL(enhancedImageUrl);
+    
+    uploadedFile = null;
+    originalImageElement = null;
+    enhancedBlob = null;
+    enhanceBtn.disabled = true;
+  }
+
+  // 4K HIGH QUALITY ENHANCEMENT - Upscales to 4K resolution with superior quality
+  async function enhanceTo4KQuality(imageElement, originalWidth, originalHeight) {
+    return new Promise((resolve) => {
+      // Target 4K resolution (3840 x 2160 or maintain aspect ratio)
+      let targetWidth, targetHeight;
+      const maxDimension = Math.max(originalWidth, originalHeight);
+      
+      // Target 4K quality - minimum 3840px on long edge for true 4K
+      if (maxDimension >= 3840) {
+        // Already 4K or higher, just enhance quality without upscaling
+        targetWidth = originalWidth;
+        targetHeight = originalHeight;
+      } else {
+        // Upscale to 4K resolution
+        const scaleFactor = 3840 / maxDimension;
+        targetWidth = Math.floor(originalWidth * scaleFactor);
+        targetHeight = Math.floor(originalHeight * scaleFactor);
+        // Cap at 4K maximum
+        if (targetWidth > 3840) targetWidth = 3840;
+        if (targetHeight > 2160) targetHeight = 2160;
+      }
+      
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+      
+      // High-quality image scaling
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(imageElement, 0, 0, targetWidth, targetHeight);
+      
+      // Get image data for enhancement
+      let imageData = ctx.getImageData(0, 0, targetWidth, targetHeight);
+      
+      // Apply multiple enhancement layers for 4K quality
+      imageData = applyAdvancedSharpening(imageData, targetWidth, targetHeight);
+      imageData = optimizeContrastAndBrightness(imageData);
+      imageData = enhanceColorVibrancy(imageData);
+      imageData = applySmartNoiseReduction(imageData, targetWidth, targetHeight);
+      imageData = enhanceDetailClarity(imageData);
+      
+      ctx.putImageData(imageData, 0, 0);
+      
+      // Convert to high-quality PNG
+      canvas.toBlob((blob) => {
+        resolve(blob);
+      }, 'image/png', 1.0);
+    });
+  }
+  
+  // Advanced sharpening for crisp 4K details
+  function applyAdvancedSharpening(imageData, width, height) {
+    const data = imageData.data;
+    const w = width;
+    const h = height;
+    const output = new Uint8ClampedArray(data.length);
+    // Stronger sharpening kernel for professional quality
+    const kernel = [0, -0.9, 0, -0.9, 4.6, -0.9, 0, -0.9, 0];
+    const side = 3;
+    const half = 1;
+    
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        let r = 0, g = 0, b = 0;
+        for (let ky = 0; ky < side; ky++) {
+          for (let kx = 0; kx < side; kx++) {
+            const px = x + kx - half;
+            const py = y + ky - half;
+            if (px >= 0 && px < w && py >= 0 && py < h) {
+              const idx = (py * w + px) * 4;
+              const weight = kernel[ky * side + kx];
+              r += data[idx] * weight;
+              g += data[idx + 1] * weight;
+              b += data[idx + 2] * weight;
+            } else {
+              const idx = (y * w + x) * 4;
+              r += data[idx];
+              g += data[idx + 1];
+              b += data[idx + 2];
+            }
+          }
+        }
+        const outIdx = (y * w + x) * 4;
+        output[outIdx] = Math.min(255, Math.max(0, r));
+        output[outIdx + 1] = Math.min(255, Math.max(0, g));
+        output[outIdx + 2] = Math.min(255, Math.max(0, b));
+        output[outIdx + 3] = data[outIdx + 3];
+      }
+    }
+    return new ImageData(output, w, h);
+  }
+  
+  function optimizeContrastAndBrightness(imageData) {
+    const data = imageData.data;
+    const contrast = 1.15; // 15% more contrast for 4K pop
+    const brightness = 1.05; // 5% brightness boost
+    
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = Math.min(255, Math.max(0, ((data[i] / 255 - 0.5) * contrast + 0.5) * 255));
+      data[i+1] = Math.min(255, Math.max(0, ((data[i+1] / 255 - 0.5) * contrast + 0.5) * 255));
+      data[i+2] = Math.min(255, Math.max(0, ((data[i+2] / 255 - 0.5) * contrast + 0.5) * 255));
+      
+      data[i] = Math.min(255, data[i] * brightness);
+      data[i+1] = Math.min(255, data[i+1] * brightness);
+      data[i+2] = Math.min(255, data[i+2] * brightness);
+    }
+    return imageData;
+  }
+  
+  function enhanceColorVibrancy(imageData) {
+    const data = imageData.data;
+    const saturationFactor = 1.22; // 22% more vibrant colors for 4K
+    
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i+1];
+      const b = data[i+2];
+      const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+      
+      data[i] = Math.min(255, Math.max(0, gray + (r - gray) * saturationFactor));
+      data[i+1] = Math.min(255, Math.max(0, gray + (g - gray) * saturationFactor));
+      data[i+2] = Math.min(255, Math.max(0, gray + (b - gray) * saturationFactor));
+    }
+    return imageData;
+  }
+  
+  function applySmartNoiseReduction(imageData, width, height) {
+    const data = imageData.data;
+    const w = width;
+    const h = height;
+    const output = new Uint8ClampedArray(data.length);
+    
+    for (let y = 1; y < h - 1; y++) {
+      for (let x = 1; x < w - 1; x++) {
+        let r = 0, g = 0, b = 0;
+        let count = 0;
+        
+        for (let ky = -1; ky <= 1; ky++) {
+          for (let kx = -1; kx <= 1; kx++) {
+            const idx = ((y + ky) * w + (x + kx)) * 4;
+            r += data[idx];
+            g += data[idx + 1];
+            b += data[idx + 2];
+            count++;
+          }
+        }
+        
+        const outIdx = (y * w + x) * 4;
+        output[outIdx] = Math.floor(r / count);
+        output[outIdx + 1] = Math.floor(g / count);
+        output[outIdx + 2] = Math.floor(b / count);
+        output[outIdx + 3] = data[outIdx + 3];
+      }
+    }
+    
+    // Copy edges
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        if (y === 0 || y === h-1 || x === 0 || x === w-1) {
+          const idx = (y * w + x) * 4;
+          output[idx] = data[idx];
+          output[idx+1] = data[idx+1];
+          output[idx+2] = data[idx+2];
+          output[idx+3] = data[idx+3];
+        }
+      }
+    }
+    
+    return new ImageData(output, w, h);
+  }
+  
+  function enhanceDetailClarity(imageData) {
+    const data = imageData.data;
+    // Micro-contrast enhancement for better detail clarity
+    for (let i = 0; i < data.length; i += 4) {
+      // Slight detail boost through local contrast
+      if (data[i] < 128) {
+        data[i] = Math.min(255, data[i] * 1.03);
+      }
+      if (data[i+1] < 128) {
+        data[i+1] = Math.min(255, data[i+1] * 1.03);
+      }
+      if (data[i+2] < 128) {
+        data[i+2] = Math.min(255, data[i+2] * 1.03);
+      }
+    }
+    return imageData;
+  }
+
+  function handleFileSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File too large! Maximum size 10MB');
+      return;
+    }
+    
+    uploadedFile = file;
+    if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
+    originalImageUrl = URL.createObjectURL(file);
+    
+    showImageInUploadArea(file, originalImageUrl);
+    
+    const img = new Image();
+    img.onload = () => {
+      originalImageElement = img;
+      enhanceBtn.disabled = false;
+    };
+    img.src = originalImageUrl;
+    
+    comparisonSection.style.display = 'none';
+  }
+
+  async function handleEnhance() {
+    if (!uploadedFile || !originalImageElement || isEnhancing) return;
+    
+    isEnhancing = true;
+    enhanceBtn.disabled = true;
+    enhanceBtn.innerHTML = '<div class="loader"></div> Processing to 4K Quality...';
+    
+    try {
+      const width = originalImageElement.width;
+      const height = originalImageElement.height;
+      
+      // Enhance to 4K High Quality
+      const enhanced = await enhanceTo4KQuality(originalImageElement, width, height);
+      enhancedBlob = enhanced;
+      
+      if (enhancedImageUrl) URL.revokeObjectURL(enhancedImageUrl);
+      enhancedImageUrl = URL.createObjectURL(enhanced);
+      
+      originalCompareImg.src = originalImageUrl;
+      enhancedCompareImg.src = enhancedImageUrl;
+      comparisonSection.style.display = 'grid';
+      
+      enhanceBtn.innerHTML = '<i class="fas fa-check-circle"></i> 4K Quality Enhanced! ✓';
+      setTimeout(() => {
+        enhanceBtn.innerHTML = '<i class="fas fa-wand-magic"></i> Enhance Quality';
+        if (uploadedFile) enhanceBtn.disabled = false;
+      }, 2000);
+      
+    } catch (err) {
+      console.error(err);
+      alert('Processing failed. Please try again.');
+      enhanceBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Try Again';
+    } finally {
+      isEnhancing = false;
+      if (uploadedFile) enhanceBtn.disabled = false;
+    }
+  }
+  
+  downloadBtn.addEventListener('click', () => {
+    if (enhancedBlob) {
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(enhancedBlob);
+      link.href = url;
+      link.download = `4k_enhanced_quality_${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } else {
+      alert('No enhanced image yet. Please enhance first.');
+    }
+  });
+  
+  uploadArea.addEventListener('click', (e) => {
+    if (e.target.id === 'changeImageBtn') return;
+    fileInput.click();
+  });
+  
+  fileInput.addEventListener('change', handleFileSelect);
+  enhanceBtn.addEventListener('click', handleEnhance);
+  
+  uploadArea.addEventListener('dragover', (e) => e.preventDefault());
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    if (files.length && files[0].type.startsWith('image/')) {
+      handleFileSelect({ target: { files: [files[0]] } });
+    }
+  });
+</script>
+</body>
+</html>
