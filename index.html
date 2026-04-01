@@ -342,7 +342,7 @@
     </div>
   </div>
 
-  <!-- Adsterra Native Banner - New Code -->
+  <!-- Adsterra Native Banner -->
   <div class="ad-container">
     <div class="ad-label"><i class="fas fa-ad"></i> Sponsored Advertisement</div>
     <div class="native-banner">
@@ -351,7 +351,7 @@
     </div>
   </div>
 
-  <!-- Adsterra Social Bar - New Code -->
+  <!-- Adsterra Social Bar -->
   <div class="ad-container">
     <div class="ad-label"><i class="fas fa-share-alt"></i> Social Bar Ads</div>
     <div class="social-bar-container">
@@ -433,24 +433,19 @@
     enhanceBtn.disabled = true;
   }
 
-  // 4K HIGH QUALITY ENHANCEMENT - Upscales to 4K resolution with superior quality
+  // 4K HIGH QUALITY ENHANCEMENT
   async function enhanceTo4KQuality(imageElement, originalWidth, originalHeight) {
     return new Promise((resolve) => {
-      // Target 4K resolution (3840 x 2160 or maintain aspect ratio)
       let targetWidth, targetHeight;
       const maxDimension = Math.max(originalWidth, originalHeight);
       
-      // Target 4K quality - minimum 3840px on long edge for true 4K
       if (maxDimension >= 3840) {
-        // Already 4K or higher, just enhance quality without upscaling
         targetWidth = originalWidth;
         targetHeight = originalHeight;
       } else {
-        // Upscale to 4K resolution
         const scaleFactor = 3840 / maxDimension;
         targetWidth = Math.floor(originalWidth * scaleFactor);
         targetHeight = Math.floor(originalHeight * scaleFactor);
-        // Cap at 4K maximum
         if (targetWidth > 3840) targetWidth = 3840;
         if (targetHeight > 2160) targetHeight = 2160;
       }
@@ -461,37 +456,29 @@
       canvas.width = targetWidth;
       canvas.height = targetHeight;
       
-      // High-quality image scaling
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
       ctx.drawImage(imageElement, 0, 0, targetWidth, targetHeight);
       
-      // Get image data for enhancement
       let imageData = ctx.getImageData(0, 0, targetWidth, targetHeight);
-      
-      // Apply multiple enhancement layers for 4K quality
       imageData = applyAdvancedSharpening(imageData, targetWidth, targetHeight);
       imageData = optimizeContrastAndBrightness(imageData);
       imageData = enhanceColorVibrancy(imageData);
       imageData = applySmartNoiseReduction(imageData, targetWidth, targetHeight);
-      imageData = enhanceDetailClarity(imageData);
       
       ctx.putImageData(imageData, 0, 0);
       
-      // Convert to high-quality PNG
       canvas.toBlob((blob) => {
         resolve(blob);
       }, 'image/png', 1.0);
     });
   }
   
-  // Advanced sharpening for crisp 4K details
   function applyAdvancedSharpening(imageData, width, height) {
     const data = imageData.data;
     const w = width;
     const h = height;
     const output = new Uint8ClampedArray(data.length);
-    // Stronger sharpening kernel for professional quality
     const kernel = [0, -0.9, 0, -0.9, 4.6, -0.9, 0, -0.9, 0];
     const side = 3;
     const half = 1;
@@ -529,8 +516,8 @@
   
   function optimizeContrastAndBrightness(imageData) {
     const data = imageData.data;
-    const contrast = 1.15; // 15% more contrast for 4K pop
-    const brightness = 1.05; // 5% brightness boost
+    const contrast = 1.15;
+    const brightness = 1.05;
     
     for (let i = 0; i < data.length; i += 4) {
       data[i] = Math.min(255, Math.max(0, ((data[i] / 255 - 0.5) * contrast + 0.5) * 255));
@@ -546,7 +533,7 @@
   
   function enhanceColorVibrancy(imageData) {
     const data = imageData.data;
-    const saturationFactor = 1.22; // 22% more vibrant colors for 4K
+    const saturationFactor = 1.22;
     
     for (let i = 0; i < data.length; i += 4) {
       const r = data[i];
@@ -590,7 +577,6 @@
       }
     }
     
-    // Copy edges
     for (let y = 0; y < h; y++) {
       for (let x = 0; x < w; x++) {
         if (y === 0 || y === h-1 || x === 0 || x === w-1) {
@@ -604,24 +590,6 @@
     }
     
     return new ImageData(output, w, h);
-  }
-  
-  function enhanceDetailClarity(imageData) {
-    const data = imageData.data;
-    // Micro-contrast enhancement for better detail clarity
-    for (let i = 0; i < data.length; i += 4) {
-      // Slight detail boost through local contrast
-      if (data[i] < 128) {
-        data[i] = Math.min(255, data[i] * 1.03);
-      }
-      if (data[i+1] < 128) {
-        data[i+1] = Math.min(255, data[i+1] * 1.03);
-      }
-      if (data[i+2] < 128) {
-        data[i+2] = Math.min(255, data[i+2] * 1.03);
-      }
-    }
-    return imageData;
   }
 
   function handleFileSelect(e) {
@@ -651,6 +619,11 @@
     img.src = originalImageUrl;
     
     comparisonSection.style.display = 'none';
+    if (enhancedImageUrl) {
+      URL.revokeObjectURL(enhancedImageUrl);
+      enhancedImageUrl = null;
+    }
+    enhancedBlob = null;
   }
 
   async function handleEnhance() {
@@ -664,7 +637,6 @@
       const width = originalImageElement.width;
       const height = originalImageElement.height;
       
-      // Enhance to 4K High Quality
       const enhanced = await enhanceTo4KQuality(originalImageElement, width, height);
       enhancedBlob = enhanced;
       
