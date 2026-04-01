@@ -633,4 +633,89 @@
       // Show original dimensions info
       const infoMsg = document.querySelector('.info-message');
       if (infoMsg) {
-        infoMsg
+        infoMsg.innerHTML = `<i class="fas fa-chart-line"></i> <strong>Quality Enhancement:</strong> Sharpness +50% | Optimized Contrast | Noise Reduction | Enhanced Color Vibrancy | <strong>Original Size: ${img.width} x ${img.height} px (Preserved)</strong>`;
+      }
+    };
+    img.src = originalImageUrl;
+    
+    comparisonSection.style.display = 'none';
+    if (enhancedImageUrl) {
+      URL.revokeObjectURL(enhancedImageUrl);
+      enhancedImageUrl = null;
+    }
+    enhancedBlob = null;
+  }
+
+  async function handleEnhance() {
+    if (!uploadedFile || !originalImageElement || isEnhancing) return;
+    
+    isEnhancing = true;
+    enhanceBtn.disabled = true;
+    enhanceBtn.innerHTML = '<div class="loader"></div> Enhancing Quality... Preserving Original Size';
+    
+    try {
+      const width = originalImageElement.width;
+      const height = originalImageElement.height;
+      
+      // Enhance quality while preserving original size
+      const enhanced = await enhanceQualityPreserveSize(originalImageElement, width, height);
+      enhancedBlob = enhanced;
+      
+      if (enhancedImageUrl) URL.revokeObjectURL(enhancedImageUrl);
+      enhancedImageUrl = URL.createObjectURL(enhanced);
+      
+      originalCompareImg.src = originalImageUrl;
+      enhancedCompareImg.src = enhancedImageUrl;
+      comparisonSection.style.display = 'grid';
+      
+      enhanceBtn.innerHTML = '<i class="fas fa-check-circle"></i> Quality Enhanced! ✓';
+      setTimeout(() => {
+        enhanceBtn.innerHTML = '<i class="fas fa-wand-magic"></i> Enhance Quality';
+        if (uploadedFile) enhanceBtn.disabled = false;
+      }, 2000);
+      
+    } catch (err) {
+      console.error(err);
+      alert('Processing failed. Please try again.');
+      enhanceBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Try Again';
+    } finally {
+      isEnhancing = false;
+      if (uploadedFile) enhanceBtn.disabled = false;
+    }
+  }
+  
+  downloadBtn.addEventListener('click', () => {
+    if (enhancedBlob) {
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(enhancedBlob);
+      link.href = url;
+      const originalName = uploadedFile ? uploadedFile.name.split('.')[0] : 'enhanced';
+      link.download = `enhanced_quality_${originalName}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } else {
+      alert('No enhanced image yet. Please enhance first.');
+    }
+  });
+  
+  uploadArea.addEventListener('click', (e) => {
+    if (e.target.id === 'changeImageBtn') return;
+    fileInput.click();
+  });
+  
+  fileInput.addEventListener('change', handleFileSelect);
+  enhanceBtn.addEventListener('click', handleEnhance);
+  
+  uploadArea.addEventListener('dragover', (e) => e.preventDefault());
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    if (files.length && files[0].type.startsWith('image/')) {
+      handleFileSelect({ target: { files: [files[0]] } });
+    }
+  });
+</script>
+</body>
+</html>
