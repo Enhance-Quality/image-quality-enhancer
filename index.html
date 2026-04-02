@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="description" content="Enhance Quality Pro - Professional image quality enhancer. Enhance your photos to 4K High Quality with advanced enhancement technology.">
+  <meta name="description" content="Enhance Quality Pro - Professional image quality enhancer. Enhance your photos to High Quality with advanced enhancement technology while preserving original dimensions.">
   <meta name="keywords" content="image enhancer, enhance image quality, 4K quality, HD quality, professional image enhancer, free tool, photo quality improver">
   <meta name="author" content="Enhance Quality Pro">
   <meta name="robots" content="index, follow">
-  <title>Enhance Quality Pro | 4K High Quality Image Enhancer</title>
+  <title>Enhance Quality Pro | High Quality Image Enhancer</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -298,14 +298,14 @@
       <span>Enhance Quality Pro</span>
     </div>
     <div class="badge">
-      <i class="fas fa-4k"></i> 4K Download
+      <i class="fas fa-crown"></i> Premium Quality
     </div>
   </nav>
 
   <div class="card">
     <div style="text-align: center; margin-bottom: 1.2rem;">
       <h1 style="font-size: 1.8rem; font-weight: 800;">✨ Enhance Quality</h1>
-      <p style="opacity: 0.85; margin-top: 0.5rem;">Improve <strong class="gradient-text">sharpness, contrast, details & colors</strong> — <strong>Download in 4K Quality</strong></p>
+      <p style="opacity: 0.85; margin-top: 0.5rem;">Improve <strong class="gradient-text">sharpness, contrast, details & colors</strong> while preserving original size</p>
     </div>
 
     <!-- Upload Area -->
@@ -323,7 +323,7 @@
     </button>
     
     <div class="info-message">
-      <i class="fas fa-chart-line"></i> <strong>Quality Enhancement:</strong> Sharpness +50% | Optimized Contrast | Noise Reduction | Enhanced Color Vibrancy | <strong>Download in 4K Ultra HD</strong>
+      <i class="fas fa-chart-line"></i> <strong>Quality Enhancement:</strong> Sharpness +50% | Optimized Contrast | Noise Reduction | Enhanced Color Vibrancy | <strong>Original Size Preserved</strong>
     </div>
 
     <!-- Comparison Section - Original vs Enhanced -->
@@ -337,9 +337,9 @@
         <h3><i class="fas fa-star"></i> Enhanced Image</h3>
         <img id="enhancedCompareImg" class="comparison-img" alt="Enhanced">
         <button id="downloadEnhancedBtn" class="download-btn">
-          <i class="fas fa-download"></i> Download 4K Quality
+          <i class="fas fa-download"></i> Download High Quality
         </button>
-        <span class="quality-indicator">✨ 4K Ultra HD Ready</span>
+        <span class="quality-indicator">✨ High Quality (Same Size)</span>
       </div>
     </div>
   </div>
@@ -362,8 +362,8 @@
   </div>
 
   <footer>
-    <p>© 2025 Enhance Quality Pro — Professional Image Quality Enhancer | 100% Free, 4K Download Available</p>
-    <p>⚡ Sharpness ↑ | Contrast ↑ | Detail ↑ | Color Vibrancy ↑ | Download in 4K Ultra HD</p>
+    <p>© 2025 Enhance Quality Pro — Professional Image Quality Enhancer | 100% Free, Original Size Preserved</p>
+    <p>⚡ Sharpness ↑ | Contrast ↑ | Detail ↑ | Color Vibrancy ↑ | Same Dimensions</p>
   </footer>
 </div>
 
@@ -389,9 +389,8 @@
   let uploadedFile = null;
   let originalImageUrl = null;
   let originalImageElement = null;
-  let enhanced4KBlob = null;  // This will store the 4K version for download
-  let enhancedDisplayBlob = null; // This stores the display version (original size)
-  let enhancedDisplayUrl = null;
+  let enhancedBlob = null;
+  let enhancedImageUrl = null;
   let isEnhancing = false;
 
   // Show image in upload area
@@ -436,81 +435,43 @@
     comparisonSection.style.display = 'none';
     
     if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
-    if (enhancedDisplayUrl) URL.revokeObjectURL(enhancedDisplayUrl);
+    if (enhancedImageUrl) URL.revokeObjectURL(enhancedImageUrl);
     
     uploadedFile = null;
     originalImageElement = null;
-    enhanced4KBlob = null;
-    enhancedDisplayBlob = null;
+    enhancedBlob = null;
     enhanceBtn.disabled = true;
   }
 
-  // Create 4K Version for Download (Upscaled to 4K)
-  async function create4KVersion(imageElement, originalWidth, originalHeight) {
+  // QUALITY ENHANCEMENT - Preserves original size, only improves quality
+  async function enhanceQualityPreserveSize(imageElement, originalWidth, originalHeight) {
     return new Promise((resolve) => {
-      let targetWidth, targetHeight;
-      const maxDimension = Math.max(originalWidth, originalHeight);
-      
-      // Target 4K resolution (3840 x 2160 or maintain aspect ratio)
-      if (maxDimension >= 3840) {
-        targetWidth = originalWidth;
-        targetHeight = originalHeight;
-      } else {
-        const scaleFactor = 3840 / maxDimension;
-        targetWidth = Math.floor(originalWidth * scaleFactor);
-        targetHeight = Math.floor(originalHeight * scaleFactor);
-        if (targetWidth > 3840) targetWidth = 3840;
-        if (targetHeight > 2160) targetHeight = 2160;
-      }
-      
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
-      
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(imageElement, 0, 0, targetWidth, targetHeight);
-      
-      // Apply enhancement for 4K quality
-      let imageData = ctx.getImageData(0, 0, targetWidth, targetHeight);
-      imageData = applyAdvancedSharpening(imageData, targetWidth, targetHeight);
-      imageData = optimizeContrastAndBrightness(imageData);
-      imageData = enhanceColorVibrancy(imageData);
-      imageData = applySmartNoiseReduction(imageData, targetWidth, targetHeight);
-      imageData = enhanceDetailClarity(imageData);
-      
-      ctx.putImageData(imageData, 0, 0);
-      
-      canvas.toBlob((blob) => {
-        resolve(blob);
-      }, 'image/png', 1.0);
-    });
-  }
-
-  // Create Display Version (Original Size, Enhanced Quality)
-  async function createDisplayVersion(imageElement, originalWidth, originalHeight) {
-    return new Promise((resolve) => {
+      // Create canvas with EXACT original dimensions
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       
       canvas.width = originalWidth;
       canvas.height = originalHeight;
       
+      // Draw original image at exact size
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
       ctx.drawImage(imageElement, 0, 0, originalWidth, originalHeight);
       
+      // Get image data for enhancement
       let imageData = ctx.getImageData(0, 0, originalWidth, originalHeight);
+      
+      // Apply multiple enhancement layers for quality improvement
       imageData = applyAdvancedSharpening(imageData, originalWidth, originalHeight);
       imageData = optimizeContrastAndBrightness(imageData);
       imageData = enhanceColorVibrancy(imageData);
       imageData = applySmartNoiseReduction(imageData, originalWidth, originalHeight);
       imageData = enhanceDetailClarity(imageData);
       
+      // Put enhanced data back
       ctx.putImageData(imageData, 0, 0);
       
+      // Convert to high-quality PNG (preserves quality)
       canvas.toBlob((blob) => {
         resolve(blob);
       }, 'image/png', 1.0);
@@ -677,20 +638,17 @@
       enhanceBtn.disabled = false;
       const infoMsg = document.querySelector('.info-message');
       if (infoMsg) {
-        const maxDim = Math.max(img.width, img.height);
-        const target4K = maxDim >= 3840 ? maxDim : 3840;
-        infoMsg.innerHTML = `<i class="fas fa-chart-line"></i> <strong>Quality Enhancement:</strong> Sharpness +50% | Optimized Contrast | Noise Reduction | Enhanced Color Vibrancy | <strong>Download in 4K Ultra HD (${target4K}px)</strong>`;
+        infoMsg.innerHTML = `<i class="fas fa-chart-line"></i> <strong>Quality Enhancement:</strong> Sharpness +50% | Optimized Contrast | Noise Reduction | Enhanced Color Vibrancy | <strong>Original Size: ${img.width} x ${img.height} px (Will be preserved)</strong>`;
       }
     };
     img.src = originalImageUrl;
     
     comparisonSection.style.display = 'none';
-    if (enhancedDisplayUrl) {
-      URL.revokeObjectURL(enhancedDisplayUrl);
-      enhancedDisplayUrl = null;
+    if (enhancedImageUrl) {
+      URL.revokeObjectURL(enhancedImageUrl);
+      enhancedImageUrl = null;
     }
-    enhanced4KBlob = null;
-    enhancedDisplayBlob = null;
+    enhancedBlob = null;
   }
 
   async function handleEnhance() {
@@ -698,26 +656,21 @@
     
     isEnhancing = true;
     enhanceBtn.disabled = true;
-    enhanceBtn.innerHTML = '<div class="loader"></div> Enhancing Quality & Preparing 4K Download...';
+    enhanceBtn.innerHTML = '<div class="loader"></div> Enhancing Quality... Preserving Original Size';
     
     try {
       const width = originalImageElement.width;
       const height = originalImageElement.height;
       
-      // Create both versions simultaneously for efficiency
-      const [displayBlob, fourKBlob] = await Promise.all([
-        createDisplayVersion(originalImageElement, width, height),
-        create4KVersion(originalImageElement, width, height)
-      ]);
+      // Enhance quality while preserving original size
+      const enhanced = await enhanceQualityPreserveSize(originalImageElement, width, height);
+      enhancedBlob = enhanced;
       
-      enhancedDisplayBlob = displayBlob;
-      enhanced4KBlob = fourKBlob;
-      
-      if (enhancedDisplayUrl) URL.revokeObjectURL(enhancedDisplayUrl);
-      enhancedDisplayUrl = URL.createObjectURL(enhancedDisplayBlob);
+      if (enhancedImageUrl) URL.revokeObjectURL(enhancedImageUrl);
+      enhancedImageUrl = URL.createObjectURL(enhanced);
       
       originalCompareImg.src = originalImageUrl;
-      enhancedCompareImg.src = enhancedDisplayUrl;
+      enhancedCompareImg.src = enhancedImageUrl;
       comparisonSection.style.display = 'grid';
       
       enhanceBtn.innerHTML = '<i class="fas fa-check-circle"></i> Quality Enhanced! ✓';
@@ -737,18 +690,18 @@
   }
   
   downloadBtn.addEventListener('click', () => {
-    if (enhanced4KBlob) {
+    if (enhancedBlob) {
       const link = document.createElement('a');
-      const url = URL.createObjectURL(enhanced4KBlob);
+      const url = URL.createObjectURL(enhancedBlob);
       link.href = url;
       const originalName = uploadedFile ? uploadedFile.name.split('.')[0] : 'enhanced';
-      link.download = `4k_enhanced_${originalName}.png`;
+      link.download = `enhanced_quality_${originalName}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } else {
-      alert('Please enhance the image first to enable 4K download.');
+      alert('No enhanced image yet. Please enhance first.');
     }
   });
   
